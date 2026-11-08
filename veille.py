@@ -31,6 +31,7 @@ from outils import (
 )
 from sources import collecter_tout
 from telegram import construire_messages, envoyer_alerte, envoyer_messages
+from traduction import traduire_elements
 from tri import compiler_themes, grouper_par_theme, selectionner
 
 DOSSIER = os.path.dirname(os.path.abspath(__file__))
@@ -95,6 +96,10 @@ def lancer(args):
     )
     log(f"{len(elements)} élément(s) collecté(s), {len(selection)} retenu(s)")
 
+    # 2b. Traduction en français (au mieux ; pas en mode démo, qui reste hors ligne)
+    if not args.demo:
+        traduire_elements(selection, config.get("traduction") or {})
+
     # 3. Message(s)
     messages = construire_messages(
         grouper_par_theme(selection),
@@ -131,8 +136,9 @@ def lancer(args):
 
 
 def main(argv=None):
-    if hasattr(sys.stdout, "reconfigure"):
-        sys.stdout.reconfigure(encoding="utf-8")  # pour les accents sous Windows
+    for flux in (sys.stdout, sys.stderr):
+        if hasattr(flux, "reconfigure"):
+            flux.reconfigure(encoding="utf-8")  # pour les accents sous Windows
     args = lire_arguments(argv)
     if args.verifier_heure:
         return verifier_heure()

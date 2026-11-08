@@ -120,7 +120,7 @@ Un mot-clé doit commencer un mot (`ssr` ne correspond pas à `classroom`, `hydr
 
 ## Flux RSS : état de la vérification
 
-Le 8/11/2026, je n'ai pas pu télécharger les flux directement depuis mon environnement. Je me suis appuyé sur des contenus de flux vus dans des résultats de recherche. À toi de confirmer les flux marqués « non confirmé » en les ouvrant dans un navigateur (ou en lançant `python veille.py --dry-run` et en regardant les lignes `[erreur]` dans le journal).
+Constat après le premier lancement réel (8/11/2026) : GitHub, Netlify et le blog Cloudflare répondent. Le changelog Cloudflare et BrightLocal ont échoué : ils sont désactivés dans `config.yaml` (`actif: false`). Pour réactiver une source, retrouve sa bonne URL, corrige `id` puis passe `actif: true` (ou supprime la ligne). Pour tester : `python veille.py --dry-run` et regarde les lignes `[erreur]`.
 
 | Flux | URL | État |
 |---|---|---|
@@ -128,14 +128,31 @@ Le 8/11/2026, je n'ai pas pu télécharger les flux directement depuis mon envir
 | Netlify changelog | `https://www.netlify.com/changelog/feed.xml` | Confirmé (RSS 2.0 vu) |
 | Google Search Central | `https://developers.google.com/search/blog/feed.xml` | Confirmé (RSS 2.0 vu) |
 | Search Engine Land | `https://feeds.feedburner.com/searchengineland` | Partiel : donné comme fonctionnel par un annuaire tiers ; je n'ai pas vu le flux lui-même. `https://searchengineland.com/feed` n'a pas été confirmé non plus. |
-| Cloudflare blog | `https://blog.cloudflare.com/rss/` | Non confirmé : les flux par auteur et par tag de ce blog existent (même format), mais pas la racine |
-| Cloudflare changelog | `https://developers.cloudflare.com/changelog/index.xml` | Non confirmé : l'URL est citée dans un article du blog Cloudflare, mais je n'ai pas vu le contenu |
+| Cloudflare blog | `https://blog.cloudflare.com/rss/` | Confirmé au premier lancement |
+| Cloudflare changelog | `https://developers.cloudflare.com/changelog/index.xml` | Désactivé : échec au premier lancement |
 | Whitespark | `https://whitespark.ca/feed/` | Non confirmé : vu uniquement dans un annuaire tiers |
-| BrightLocal | `https://www.brightlocal.com/feed/` | Non confirmé : aucune URL officielle trouvée, et un annuaire tiers montre des articles anciens, le flux est peut-être inactif |
+| BrightLocal | `https://www.brightlocal.com/feed/` | Désactivé : échec au premier lancement, flux peut-être inactif |
 
 Le blog Astro (`astro.build/rss.xml`) ne faisait pas partie de ta liste : je l'ai ajouté parce qu'il annonce les versions majeures. Retire-le dans `config.yaml` si tu n'en veux pas.
 
 Les releases GitHub (API REST) ont été testées en réel depuis ton poste (voir le récapitulatif de la livraison).
+
+## Traduction en français
+
+Les sources étant en anglais, les titres et résumés sont traduits automatiquement via l'API gratuite de MyMemory (sans clé, sans e-mail). Les noms de versions (`astro@7.4.7`) ne sont pas traduits. Réglage dans `config.yaml` :
+
+```yaml
+traduction:
+  enabled: true      # false = tout en anglais
+  langue_source: "en"
+  langue_cible: "fr"
+```
+
+C'est « au mieux » : qualité moyenne, quota quotidien limité (partagé entre les utilisateurs d'une même IP). Si le service échoue ou si le quota est atteint, le texte reste en anglais et le message part quand même. Le mode `--demo` ne traduit pas.
+
+## Releases GitHub sans notes
+
+Par défaut (`ignorer_sans_notes: true` sur la source GitHub), une release sans notes utiles (souvent une simple mise à jour de dépendances) est ignorée, sauf si elle est prioritaire (`astro@`).
 
 ## Activer Reddit
 

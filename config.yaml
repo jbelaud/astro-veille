@@ -20,8 +20,16 @@
 reddit:
   enabled: false
 
+# Traduction automatique des titres et résumés (gratuite, via l'API publique de MyMemory).
+# Qualité moyenne et quota quotidien limité : si elle échoue, le texte reste en anglais.
+# Mets enabled: false pour tout garder en anglais.
+traduction:
+  enabled: true
+  langue_source: "en"
+  langue_cible: "fr"
+
 reglages:
-  max_elements: 15                    # nombre maximum d'éléments dans le message
+  max_elements: 15                   # nombre maximum d'éléments dans le message
   fenetre_premier_lancement_jours: 7   # période couverte au tout premier lancement
   marge_minutes: 60                    # petite marge avant la dernière exécution réussie
 
@@ -53,6 +61,7 @@ sources:
       - "@astrojs/react@"
     prefixes_prioritaires: ["astro@"]   # ces releases passent en tête du message
     prereleases: false
+    ignorer_sans_notes: true   # ignore les releases sans notes utiles (hors prioritaires)
     mots_cles: []
 
   - type: github
@@ -71,19 +80,20 @@ sources:
     mots_cles: []
 
   - type: rss
-    id: "https://blog.cloudflare.com/rss/"       # non confirmé (voir README)
+    id: "https://blog.cloudflare.com/rss/"       # confirmé au premier lancement
     nom: "Cloudflare (blog)"
     mots_cles: ["workers", "pages", "astro", "wrangler", "static", "ai crawl", "crawler", "robots.txt", "seo"]
 
   - type: rss
-    id: "https://developers.cloudflare.com/changelog/index.xml"   # non confirmé (voir README)
+    id: "https://developers.cloudflare.com/changelog/index.xml"
     nom: "Cloudflare (changelog)"
+    actif: false   # a échoué au premier lancement : URL à retrouver avant de réactiver
     mots_cles: ["workers", "pages", "astro", "wrangler", "static assets", "vite"]
 
   - type: rss
     id: "https://www.netlify.com/changelog/feed.xml"
     nom: "Netlify (changelog)"
-    mots_cles: ["astro", "vite", "framework", "build", "deploy", "functions", "edge", "image", "environment", "redirect", "headers", "forms", "cdn"]
+    mots_cles: ["astro", "vite", "framework", "adapter", "edge function", "netlify.toml", "redirect", "environment variable", "deploy preview", "image cdn", "serverless function", "ssr", "build image", "build plugin"]
 
   - type: rss
     id: "https://developers.google.com/search/blog/feed.xml"
@@ -101,8 +111,9 @@ sources:
     mots_cles: []
 
   - type: rss
-    id: "https://www.brightlocal.com/feed/"      # non confirmé, flux peut-être inactif (voir README)
+    id: "https://www.brightlocal.com/feed/"
     nom: "BrightLocal"
+    actif: false   # a échoué au premier lancement (flux peut-être inactif)
     mots_cles: []
 
 # Thèmes : "nom affiché" -> liste de mots-clés (sans tenir compte des majuscules).

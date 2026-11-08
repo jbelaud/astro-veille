@@ -415,8 +415,15 @@ def collecter_github(cfg, depuis):
         candidates.append(r)
 
     elements = []
+    ignorer_sans_notes = cfg.get("ignorer_sans_notes", True)
     for r in garder_dernier_par_paquet(candidates):
         corps = r.get("body") or ""
+        resume = resume_changelog(corps)
+        prioritaire = bool(prioritaires) and r["tag_name"].startswith(prioritaires)
+        # Une release sans notes utiles (souvent une simple mise à jour de dépendances)
+        # n'apporte rien : on l'ignore, sauf si elle est prioritaire (ex. astro@).
+        if not resume and ignorer_sans_notes and not prioritaire:
+            continue
         elements.append(
             Element(
                 cle=f"github:{r['id']}",
@@ -425,9 +432,9 @@ def collecter_github(cfg, depuis):
                 url=r["html_url"],
                 source=cfg["nom"],
                 date=lire_iso(r["published_at"]),
-                resume=resume_changelog(corps) or "Voir les notes de version.",
+                resume=resume or "Voir les notes de version.",
                 texte=f"{r['tag_name']}\n{corps[:3000]}",
-                prioritaire=bool(prioritaires) and r["tag_name"].startswith(prioritaires),
+                prioritaire=prioritaire,
             )
         )
     log(f"[github] {depot} : {len(elements)} release(s) retenue(s)")
