@@ -1,0 +1,25 @@
+# Base SQLite locale (recréée à chaque exécution). Elle peut contenir des données Reddit :
+# elle ne doit JAMAIS être committée.
+*.sqlite-wal
+*.sqlite-shm
+*.sqlite
+*.sqlite-journal
+*.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Fichiers locaux et secrets
+.env
+.env.*
+*.local
+digest*.md
+
+# Éditeurs
+.idea/
+.vscode/
+.DS_Store

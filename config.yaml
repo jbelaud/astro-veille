@@ -1,0 +1,128 @@
+# Configuration de la veille Astro.
+# Pour ajouter ou retirer une source, il suffit de modifier ce fichier (pas le code).
+#
+# NOTE SUR REDDIT : l'usage de l'API Reddit doit respecter la Responsible Builder Policy
+# de Reddit. Aucune donnée Reddit ne doit servir à entraîner un modèle d'IA ni être
+# republiée. Reddit est désactivé par défaut (voir `reddit.enabled` plus bas) : il faut
+# d'abord obtenir l'approbation de Reddit (voir README, section « Activer Reddit »).
+#
+# Chaque source a :
+#   type      : reddit, github ou rss
+#   id        : reddit -> nom du subreddit ; github -> "propriétaire/dépôt" ; rss -> URL du flux
+#   nom       : nom affiché dans le message Telegram
+#   mots_cles : liste OPTIONNELLE. Si elle est remplie, seuls les éléments contenant
+#               au moins un de ces mots sont gardés. Vide ou absente = on garde tout.
+#   actif     : false pour désactiver une source sans la supprimer
+
+# Reddit : facultatif, DÉSACTIVÉ par défaut. Tant que enabled vaut false, le programme
+# ne fait aucun appel à Reddit (ni authentifié, ni public). Pas de repli vers les
+# endpoints publics.
+reddit:
+  enabled: false
+
+reglages:
+  max_elements: 15                    # nombre maximum d'éléments dans le message
+  fenetre_premier_lancement_jours: 7   # période couverte au tout premier lancement
+  marge_minutes: 60                    # petite marge avant la dernière exécution réussie
+
+sources:
+  # ---------------------------------------------------------------- Reddit
+  - type: reddit
+    id: astrojs
+    nom: "r/astrojs"
+    mots_cles: []
+    seuil_score_reponse: 5     # une réponse n'est gardée que si elle a au moins cette note
+    limite_posts: 100          # posts lus par listing (nouveaux, meilleurs de la semaine)
+    jours_commentaires: 14     # on lit les réponses des fils de moins de N jours
+    max_fils: 40               # nombre maximum de fils lus par exécution
+
+  # ---------------------------------------------------------------- GitHub
+  # withastro/astro est un "monorepo" : il publie les releases d'Astro ET des intégrations.
+  # prefixes_tags limite aux paquets qui nous intéressent. Pour en suivre un autre,
+  # ajoute son préfixe (ex. "@astrojs/vue@").
+  - type: github
+    id: withastro/astro
+    nom: "Astro (releases)"
+    prefixes_tags:
+      - "astro@"
+      - "@astrojs/cloudflare@"
+      - "@astrojs/netlify@"
+      - "@astrojs/node@"
+      - "@astrojs/mdx@"
+      - "@astrojs/sitemap@"
+      - "@astrojs/react@"
+    prefixes_prioritaires: ["astro@"]   # ces releases passent en tête du message
+    prereleases: false
+    mots_cles: []
+
+  - type: github
+    id: withastro/starlight
+    nom: "Starlight (releases)"
+    prefixes_tags:
+      - "@astrojs/starlight@"
+    prereleases: false
+    mots_cles: []
+
+  # ---------------------------------------------------------------- Flux RSS
+  # Voir le README : certaines URL de flux n'ont pas pu être confirmées.
+  - type: rss
+    id: "https://astro.build/rss.xml"
+    nom: "Blog Astro"
+    mots_cles: []
+
+  - type: rss
+    id: "https://blog.cloudflare.com/rss/"       # non confirmé (voir README)
+    nom: "Cloudflare (blog)"
+    mots_cles: ["workers", "pages", "astro", "wrangler", "static", "ai crawl", "crawler", "robots.txt", "seo"]
+
+  - type: rss
+    id: "https://developers.cloudflare.com/changelog/index.xml"   # non confirmé (voir README)
+    nom: "Cloudflare (changelog)"
+    mots_cles: ["workers", "pages", "astro", "wrangler", "static assets", "vite"]
+
+  - type: rss
+    id: "https://www.netlify.com/changelog/feed.xml"
+    nom: "Netlify (changelog)"
+    mots_cles: ["astro", "vite", "framework", "build", "deploy", "functions", "edge", "image", "environment", "redirect", "headers", "forms", "cdn"]
+
+  - type: rss
+    id: "https://developers.google.com/search/blog/feed.xml"
+    nom: "Google Search Central"
+    mots_cles: []
+
+  - type: rss
+    id: "https://feeds.feedburner.com/searchengineland"   # confirmé seulement par un annuaire tiers
+    nom: "Search Engine Land"
+    mots_cles: ["local seo", "google business profile", "local pack", "map", "ai overview", "ai mode", "generative", "geo", "llm", "chatgpt", "core update", "structured data", "schema", "core web vitals", "spam update"]
+
+  - type: rss
+    id: "https://whitespark.ca/feed/"            # non confirmé (voir README)
+    nom: "Whitespark"
+    mots_cles: []
+
+  - type: rss
+    id: "https://www.brightlocal.com/feed/"      # non confirmé, flux peut-être inactif (voir README)
+    nom: "BrightLocal"
+    mots_cles: []
+
+# Thèmes : "nom affiché" -> liste de mots-clés (sans tenir compte des majuscules).
+# Un mot-clé doit COMMENCER un mot : "ssr" ne correspond pas à "classroom",
+# mais "hydrat" correspond à "hydration".
+# Pour ajouter un thème, ajoute simplement un bloc. L'ordre ne compte qu'en cas d'égalité.
+themes:
+  "Content collections": ["content collection", "defineCollection", "content.config", "glob("]
+  "Islands": ["island", "client:load", "client:idle", "client:visible", "client:only", "hydrat"]
+  "SSR / adapters": ["adapter", "ssr", "server-side", "prerender", "on-demand"]
+  "Middleware": ["middleware", "Astro.locals"]
+  "Actions": ["astro actions", "astro:actions", "defineAction"]
+  "View transitions": ["view transition", "ClientRouter", "transition:"]
+  "i18n": ["i18n", "locale", "multilingual", "multilingue", "internationali"]
+  "Images": ["astro:assets", "<Image", "<Picture", "image optimi", "sharp"]
+  "Intégrations": ["integration", "@astrojs/", "tailwind", "mdx", "react", "svelte", "vue", "sitemap"]
+  "Déploiement (Cloudflare / Netlify / GitHub)": ["cloudflare", "netlify", "github pages", "github actions", "deploy", "wrangler", "workers"]
+  "SEO local": ["local seo", "seo local", "google business profile", "local pack", "map pack", "local search", "citation"]
+  "GEO (moteurs génératifs)": ["generative engine", "answer engine", "ai overview", "ai mode", "llms.txt", "ai search", "ai citation"]
+  "SEO (général)": ["seo", "search console", "core update", "structured data", "core web vitals", "crawl", "indexing"]
+  "Variables d'environnement": [".env", "import.meta.env", "astro:env", "environment variable"]
+  "Vite": ["vite"]
+  "Migration / upgrade": ["upgrade", "migrat", "breaking change", "deprecat"]

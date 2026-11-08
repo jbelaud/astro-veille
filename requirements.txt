@@ -1,0 +1,4 @@
+# Seules dépendances externes (le reste utilise la bibliothèque standard de Python)
+PyYAML>=6.0
+# Nécessaire sous Windows pour que le fuseau "Europe/Paris" soit connu
+tzdata
