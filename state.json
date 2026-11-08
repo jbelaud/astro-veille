@@ -1,4 +1,20 @@
 {
-  "derniere_execution_reussie": null,
-  "ids_envoyes": {}
+  "derniere_execution_reussie": "2026-11-08T20:06:51.119640+00:00",
+  "ids_envoyes": {
+    "github:435664053": "2026-11-08T20:06:51.119640+00:00",
+    "github:435664177": "2026-11-08T20:06:51.119640+00:00",
+    "github:435664238": "2026-11-08T20:06:51.119640+00:00",
+    "github:435664331": "2026-11-08T20:06:51.119640+00:00",
+    "github:435664374": "2026-11-08T20:06:51.119640+00:00",
+    "github:435664425": "2026-11-08T20:06:51.119640+00:00",
+    "github:436834191": "2026-11-08T20:06:51.119640+00:00",
+    "rss:01M5J4YTFMTRT7PG1Y8HAPNPYG": "2026-11-08T20:06:51.119640+00:00",
+    "rss:01M6HZ245M2MBZAF7ZQXKC85X6": "2026-11-08T20:06:51.119640+00:00",
+    "rss:https://www.netlify.com/changelog/2026-11-03-check-netlify-deploys-from-mcp/": "2026-11-08T20:06:51.119640+00:00",
+    "rss:https://www.netlify.com/changelog/2026-11-03-new-email-requirements-for-form-notifications/": "2026-11-08T20:06:51.119640+00:00",
+    "rss:https://www.netlify.com/changelog/2026-11-03-nextjs-security-vulnerabilities/": "2026-11-08T20:06:51.119640+00:00",
+    "rss:https://www.netlify.com/changelog/2026-11-04-json-schema-for-netlify-toml/": "2026-11-08T20:06:51.119640+00:00",
+    "rss:https://www.netlify.com/changelog/gpt-image-2-6-sunburst-flare-ai-gateway/": "2026-11-08T20:06:51.119640+00:00",
+    "rss:https://www.netlify.com/changelog/updates-to-our-terms-and-privacy-statement/": "2026-11-08T20:06:51.119640+00:00"
+  }
 }
